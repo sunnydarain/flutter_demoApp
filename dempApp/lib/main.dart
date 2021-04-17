@@ -1,84 +1,94 @@
 import 'package:flutter/material.dart';
-// import 'package:dio/dio.dart';
-// import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'pages/home/homeImage.dart';
+import 'pages/myImg/myImage.dart';
+import 'pages/mime/mine.dart';
 
 void main() {
-  	runApp(MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  	// This widget is the root of your application.
-  	@override
-  	Widget build(BuildContext context) {
-    	return MaterialApp(
-      		title: 'Flutter Demo',
-      		theme: ThemeData(
-        		primarySwatch: Colors.blue,
-        		visualDensity: VisualDensity.adaptivePlatformDensity,
-      		),
-      		home: MyHomePage(title: 'Flutter Demo Home Page'),
-    	);
-  	}
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MainPage(),
+    );
+  }
+}
 
+class MainPage extends StatefulWidget {
+
+  MainPage({Key key}) : super(key: key);
+
+  @override
+  _MainPage createState() => _MainPage();
+
+}
+
+class _MainPage extends State<MainPage> {
   
-}
+  final List<BottomNavigationBarItem> bottomNavItems = [
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.home),
+      label: "家庭相册",    
+    ),
 
-class MyHomePage extends StatefulWidget {
-  	MyHomePage({Key key, this.title}) : super(key: key);
-  	final String title;
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.image),
+      label: "个人相册",    
+    ),
 
-  	@override
-  	_MyHomePageState createState() => _MyHomePageState();
-}
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.person),
+      label: "我的",    
+    ),
+  ];
 
-class _MyHomePageState extends State<MyHomePage> {
-  	int _counter = 0;
+  int currentIndex;
 
-  	void _incrementCounter() {
-    	setState(() {
-      		_counter++;
-    	});
-  	}
+  final pages = [
+    HomeImage(),
+    MyImage(),
+    Mine()
+  ];
 
-	// void _addBadge() {
-    // 	FlutterAppBadger.updateBadgeCount(1);
-  	// }
-	
-	// void _getHttp() async {
-    // 	try {
-    //   		Response response = await Dio().get("http://www.google.cn");
-    //   		print(response);
-    // 	} catch (e) {
-    //   		print(e);
-    // 	}
-  	// }
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = 0;
+  }
 
-  	@override
-  	Widget build(BuildContext context) {
- 
-    	return Scaffold(
-			appBar: AppBar(
-				title: Text(widget.title),
-			),
-			body: Center(
-				child: Column(
-					mainAxisAlignment: MainAxisAlignment.center,
-					children: <Widget>[
-						Text(
-							'You have pushed the button this many times:',
-						),
-						Text(
-							'$_counter',
-							style: Theme.of(context).textTheme.headline4,
-						),
-					],
-				),
-			),
-			floatingActionButton: FloatingActionButton(
-				onPressed: _incrementCounter,
-				tooltip: 'Increment',
-				child: Icon(Icons.add),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-    	);
-  	}
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('相册APP'),backgroundColor: Colors.deepPurple[600],),
+      bottomNavigationBar: BottomNavigationBar(
+        items: bottomNavItems,
+        currentIndex: currentIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          _changePage(index);
+        },
+      ),
+      body: pages[currentIndex],
+    );
+  }
+
+  // 切换页面
+  void _changePage(int index) {
+    if(index != currentIndex) {
+      setState(() {
+        currentIndex = index;
+      });
+    }
+  }
+
 }
